@@ -11,6 +11,7 @@ class Config(object):
         self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-DPM'
         self.img_path = self.dataset_path+'/img1/'
         self.img_List = None
+        self.imgSeq_lenth = 0
         
 
         ## Common selfeter

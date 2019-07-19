@@ -24,18 +24,19 @@ def prepare_data(param):
     for detection in detlines:
         detection = deal(detection)
         if detection[0] == fr_prev:
-            fr_detections.append(detection)
+            fr_detections.append(detection[:7])
         else:
             detections.append(fr_detections)
             fr_detections.clear()
-            fr_detections.append(detection)
+            fr_detections.append(detection[:7])
         fr_prev = detection[0]
-    param.detections = np.array(detections)
+    param.detections = np.array(detections,dtype=np.float32)
     det_file.close()
     print("shape: {} |||detections get from txt!".format(param.detections.shape))
     img_dir = param.dataset_path+"/img1"
     img_list = get_sub_files(img_dir)
     param.img_List = img_list
+    param.imgSeq_lenth = len(img_list)
     print("frames: {} ||||img_list generate over!".format(len(param.img_List)))
 if __name__ == '__main__':
     param = Config()
