@@ -18,21 +18,22 @@ def prepare_data(param):
     detlines = det_file.readlines()
     detections = []
     fr_detections = []
-    fr_prev = 1
+    cur_det = 1
     deal = lambda x:x.strip("\n").split(",")#seperate the lines with ", " and remove the "\n"
+    str2float = lambda x:[float(i) for i in x]
     ###get detections
     for detection in detlines:
         detection = deal(detection)
-        if detection[0] == fr_prev:
+        detection = str2float(detection)
+        if detection[0] == cur_det:
             fr_detections.append(detection[:7])
         else:
             detections.append(fr_detections)
-            fr_detections.clear()
+            fr_detections = []
             fr_detections.append(detection[:7])
-        fr_prev = detection[0]
-    param.detections = np.array(detections,dtype=np.float32)
+            cur_det = detection[0]
+    param.detections = detections
     det_file.close()
-    print("shape: {} |||detections get from txt!".format(param.detections.shape))
     img_dir = param.dataset_path+"/img1"
     img_list = get_sub_files(img_dir)
     param.img_List = img_list

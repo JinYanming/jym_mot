@@ -12,6 +12,7 @@ class Config(object):
         self.img_path = self.dataset_path+'/img1/'
         self.img_List = None
         self.imgSeq_lenth = 0
+        self.imgsize = [1920,1080,3]
         
 
         ## Common selfeter
@@ -33,7 +34,7 @@ class Config(object):
         self.Bin = 48                                      # # of Histogram Bin
         self.vecsize = self.tmplsize[0]*self.tmplsize[1]
         self.subregion = 1                                
-        self.subvec = self.vecsize/self.subregion        
+        self.subvec = int(self.vecsize/self.subregion)        
         self.color = 'RGB'                            # RGB or HSV
 
 

@@ -1,19 +1,9 @@
-# Generated with SMOP  0.41
-from libsmop import *
-# /workspace/MOT/cmot-v1/Common/Labelling.m
-
-    
-@function
+import numpy as np    
 def Labelling(param=None,*args,**kwargs):
-    varargin = Labelling.varargin
-    nargin = Labelling.nargin
-
-    ## Copyright (C) 2014 Seung-Hwan Bae
-## All rights reserved.
     
     label=param.label
-# /workspace/MOT/cmot-v1/Common/Labelling.m:5
-    idx=min(find(label == 0))
-# /workspace/MOT/cmot-v1/Common/Labelling.m:6
+    label_array = np.array(label)
+    zero_index = np.where(label_array == 0)[0]
+    idx = np.min(zero_index)
     param.label[idx]=1
-# /workspace/MOT/cmot-v1/Common/Labelling.m:7
+    return param,idx

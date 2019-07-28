@@ -1,74 +1,61 @@
-# Generated with SMOP  0.41
-from libsmop import *
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m
+import numpy as np
+import math
+def affparam2mat(p = None,*args,**kwargs):
 
+# function q  =  affparam2mat(p)
     
-@function
-def affparam2mat(p=None,*args,**kwargs):
-    varargin = affparam2mat.varargin
-    nargin = affparam2mat.nargin
-
-    # function q = affparam2mat(p)
-    
-    # The functions affparam2geom and affparam2mat convert a 'geometric'
+# The functions affparam2geom and affparam2mat convert a 'geometric'
 # affine parameter to/from a matrix form (2x3 matrix).
 # 
 # affparam2geom converts a 2x3 matrix to 6 affine parameters
 # (x, y, th, scale, aspect, skew), and affparam2mat does the inverse.
-    
-    #    p(6,n) : [dx dy sc th sr phi]'
+#    p(6,n) : [dx dy sc th sr phi]'
 #    q(6,n) : [q(1) q(3) q(4); q(2) q(5) q(6)]
-    
-    # Reference "Multiple View Geometry in Computer Vision" by Richard
+
+# Reference "Multiple View Geometry in Computer Vision" by Richard
 # Hartley and Andrew Zisserman.
+
+
+    sz = [len(p[0]),len(p)]
+    #if (sz[1]  ==  6):
+    #   p = p
+    p = np.array(p)
+    p = np.swapaxes(p,0,1)
+    s = p[2,:]
+    th = p[3,:]
+    r = p[4,:]
+    phi = p[5,:]
+
+    cth = np.cos(th).astype(np.float32)
+    sth = np.sin(th).astype(np.float32)
+    cph = np.cos(phi).astype(np.float32)
+    sph = np.sin(phi).astype(np.float32)
+    np_array = True if sz[1] > 1 else False
+    dot_result = lambda x,y:np.dot(x,y) if sz[1] > 1 else x*y
+    ccc=dot_result(dot_result(cth,cph),cph)
+    ccs=dot_result(dot_result(cth,cph),sph)
+    css=dot_result(dot_result(cth,sph),sph)
+    scc=dot_result(dot_result(sth,cph),cph)
+    scs=dot_result(dot_result(sth,cph),sph)
+    sss=dot_result(dot_result(sth,sph),sph)
     
-    # Copyright (C) Jongwoo Lim and David Ross.  All rights reserved.
-    
-    sz=size(p)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:19
-    if (length(ravel(p)) == 6):
-        p=ravel(p)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:21
-    
-    s=p(3,arange())
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:23
-    th=p(4,arange())
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:23
-    r=p(5,arange())
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:23
-    phi=p(6,arange())
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:23
-    cth=cos(th)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:24
-    sth=sin(th)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:24
-    cph=cos(phi)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:24
-    sph=sin(phi)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:24
-    ccc=multiply(multiply(cth,cph),cph)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:25
-    ccs=multiply(multiply(cth,cph),sph)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:25
-    css=multiply(multiply(cth,sph),sph)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:25
-    scc=multiply(multiply(sth,cph),cph)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:26
-    scs=multiply(multiply(sth,cph),sph)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:26
-    sss=multiply(multiply(sth,sph),sph)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:26
-    q[1,arange()]=p(1,arange())
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:27
-    q[2,arange()]=p(2,arange())
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:27
-    q[3,arange()]=multiply(s,(ccc + scs + multiply(r,(css - scs))))
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:28
-    q[4,arange()]=multiply(s,(multiply(r,(ccs - scc)) - ccs - sss))
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:28
-    q[5,arange()]=multiply(s,(scc - ccs + multiply(r,(ccs + sss))))
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:29
-    q[6,arange()]=multiply(s,(multiply(r,(ccc + scs)) - scs + css))
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:29
-    q=reshape(q,sz)
-# /workspace/MOT/cmot-v1/Common/affparam2mat.m:30
+    #ccc = dot_result(dot_result(cth,cph),cph)
+    #ccs = dot_result(dot_result(cth,cph),sph)
+    #css = dot_result(dot_result(cth,sph),sph)
+    #scc = dot_result(dot_result(sth,cph),cph)
+    #scs = dot_result(dot_result(sth,cph),sph)
+    #sss = dot_result(dot_result(sth,sph),sph)
+    q = np.zeros((sz[0],sz[1]))
+    q[0,:] = p[0,:]
+    q[1,:] = p[1,:]
+    q[2,:]=dot_result(s,(ccc + scs + dot_result(r,(css - scs))))
+    q[3,:]=dot_result(s,(dot_result(r,(ccs - scc)) - ccs - sss))
+    q[4,:]=dot_result(s,(scc - ccs + dot_result(r,(ccs + sss))))
+    q[5,:]=dot_result(s,(dot_result(r,(ccc + scs)) - scs + css))
+    q[2,:] = s.dot(ccc + scs + r.dot(css - scs))
+    q[3,:] = s.dot(r.dot(ccs - scc) - ccs - sss)
+    q[4,:] = s.dot(scc - ccs + r.dot(ccs + sss))
+    q[5,:] = s.dot(r.dot(ccc + scs) - scs + css)
+    q = np.reshape(q,sz)
+    q = np.swapaxes(q,0,1)
+    return q
