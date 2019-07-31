@@ -8,6 +8,8 @@ from tools.prepare_data import prepare_data
 from config import Config
 from mot_func.mot_pre_association import mot_pre_association
 from mot_func.MOT_Initialization_Tracklets import MOT_Initialization_Tracklets
+from mot_func.MOT_Local_Association import MOT_Local_Association
+
 
 print("config param generated...")
 param  =  Config()
@@ -54,8 +56,6 @@ for i in range(0,init_frame):
     Obs_grap[i].iso_child  =  []
 
 Obs_grap = mot_pre_association(detections,Obs_grap,frame_start,init_frame)
-for item in Obs_grap:
-    print(item.child)
 st_fr = 1
 en_fr = init_frame
 for fr in range(0,init_frame):
@@ -66,11 +66,16 @@ for fr in range(0,init_frame):
 
 Trk,param,Obs_grap = MOT_Initialization_Tracklets(init_img_set,Trk,detections,param,Obs_grap,init_frame,nargout = 3)
 ## Tracking
-for fr in range(init_frame + 1,frame_end):
-    filename = strcat(img_path,img_List(fr).name)
-    rgbimg = imread(filename)
+#for item in Trk:
+#    print(item)
+#    for state in item.state:
+#        print(state)
+for fr in range(init_frame -1 + 1,frame_end):
+    filename = param.img_path+param.img_List[fr]
+    rgbimg = cv2.imread(filename)
+    rgbimg = rgbimg.swapaxes(0,2)
     init_img_set[fr] = rgbimg
-    Trk,Obs_grap,Obs_info = MOT_Local_Association(Trk,detections,Obs_grap,param,ILDA,fr,rgbimg,nargout = 3)
+    Trk,Obs_grap,Obs_info = MOT_Local_Association(Trk,detections,Obs_grap,param,fr,rgbimg,3)
     Trk,Obs_grap = MOT_Global_Association(Trk,Obs_grap,Obs_info,param,ILDA,fr,nargout = 2)
     Trk = MOT_Confidence_Update(Trk,param,fr,param.lambda_)
     Trk = MOT_Type_Update(rgbimg,Trk,param.type_thr,fr)

@@ -1,6 +1,7 @@
 import numpy as np
 from Common.color_tools import rgb2hsv
 from mot_func.mot_generate_temp import mot_generate_temp
+from tools.array_random_concat import array_random_concat
 def mot_appearance_model_generation(img=None,param=None,state=None,state_list=False,*args,**kwargs):
 
     # input :
@@ -29,23 +30,27 @@ def mot_appearance_model_generation(img=None,param=None,state=None,state_list=Fa
     s_tmpl = s_tmpl.reshape([param.subvec,param.subregion,Nd])
     v_tmpl = v_tmpl.reshape([param.subvec,param.subregion,Nd])
     all_tmpl = np.ones([3,param.subvec, param.subregion,Nd])
-    all_tmpl[0]=h_tmpl
+    all_tmpl[0]=h_tmpl#all_tmpl shape [3,2018,1,1]
     all_tmpl[1]=s_tmpl
     all_tmpl[2]=v_tmpl
     nbins=param.Bin
-    tmpl_hist=[]
-    temp_hist=[]
-    for j in range(1,Nd):
-        temp_hist=[]
-        for i in arange(1,3).reshape(-1):
-            max_val=max(max(all_tmpl[i](arange(),arange(),j)))
-            cb_tmpl=all_tmpl[i](arange(),arange(),j)
-            cb_tmpl=dot(cb_tmpl / max_val,nbins)
+    tmpl_hist=None
+    for j in range(0,Nd):
+        temp_hist = None
+        i = 0
+        while i < 3:
+            max_val=np.max(np.max(all_tmpl[i,:,:,j]))
+            cb_tmpl=all_tmpl[i,:,:,j]
+            cb_tmpl=np.dot((cb_tmpl/max_val),nbins)
             if param.subregion == 1:
-                cb_tmpl_hist=(hist(cb_tmpl,nbins) / param.subvec).T
+                #to get the histogram map location
+                cb_tmpl_hist=(np.histogram(cb_tmpl,nbins)[0] / param.subvec).T
             else:
-                cb_tmpl_hist=(hist(cb_tmpl,nbins) / param.subvec)
-            temp_hist=concat([[temp_hist],[cb_tmpl_hist]])
-        tmpl_hist[arange(),arange(),j]=temp_hist / 3
+                cb_tmpl_hist=(np.histogram(cb_tmpl,nbins)[0] / param.subvec)
+            cb_tmpl_hist = cb_tmpl_hist[:,np.newaxis]
+            temp_hist = array_random_concat(temp_hist,cb_tmpl_hist,2,0)
+            i = i+1
+        shape = None if ~ isinstance(tmpl_hist,np.ndarray)  else tmpl_hist.shape
+        tmpl_hist = array_random_concat(tmpl_hist,temp_hist/3,3,2)
     return tmpl_hist
 

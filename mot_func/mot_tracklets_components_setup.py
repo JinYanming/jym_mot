@@ -18,7 +18,7 @@ def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_
     if tmp_label != None :
         tracklet.label = tmp_label
     else:
-        param,idx=Labelling(param,nargout=2)
+        param,idx=Labelling(param)
         tracklet.label = idx
     
     tracklet.ifr = cfr - nofa + 1
@@ -32,21 +32,25 @@ def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_
         tracklet.state.append(temp_state)
         #tracklet.state[tmp_idx][3,1]=detections(tmp_idx).h(ass_idx(tmp_idx))
         tmpl=mot_appearance_model_generation(img[tmp_idx],param,temp_state,False)
-        Acc_tmpl=Acc_tmpl + tmpl
+        Acc_tmpl=Acc_tmpl + tmpl.squeeze()[:,np.newaxis]
     tracklet.state.reverse()
     
     # Appearnce Model
     tracklet.A_Model = Acc_tmpl / nofa
     # Forward Motion Model
+    # XX [4,frames]
     XX,PP=mot_motion_model_generation(tracklet,param,'Forward',nargout=2)
-    lt=size(XX,2)
-    tracklet.FMotion.X[arange(),arange(cfr - lt + 1,cfr)]=XX
-    tracklet.FMotion.P[arange(),arange(),arange(cfr - lt + 1,cfr)]=PP
+    lt=XX.shape[1]
+    tracklet.FMotion.X = np.zeros((4,cfr))
+    tracklet.FMotion.P = np.zeros((4,4,cfr))
+    tracklet.FMotion.X[:,cfr -lt:]=XX
+    tracklet.FMotion.P[:,:,cfr - lt:]=PP
     tracklet.BMotion.X = []
     tracklet.BMotion.P = []
-    tracklet.hyp.score[cfr]=0
-    tracklet.hyp.ystate[cfr]=[]
-    return tracklet,param
+    tracklet.hyp.score = np.array([0]*cfr)
+    tracklet.hyp.ystate = [[]]*cfr
+    Trk.append(tracklet)
+    return Trk,param
     
 if __name__ == '__main__':
     pass

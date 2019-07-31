@@ -16,7 +16,7 @@ class Config(object):
         
 
         ## Common selfeter
-        self.label = np.zeros(shape=(1,10000))
+        self.label = np.array([0]*10000)
         self.show_scan = 4
         self.new_thr = self.show_scan + 1    # Temporal window size for tracklet initialization
         self.obs_thr = 0.4                    # Threshold for local and global association
@@ -44,20 +44,20 @@ class Config(object):
         self.Ts = 1 # Frame rates
 
         self.Ts = self.Ts
-        self.F1 = np.array([[1,self.Ts],[0,1]]) 
+        self.F1 = np.array([[1,self.Ts],[0,1]])
         self.Fz = np.zeros((2,2)) 
-        self.F = np.array([[self.F1,self.Fz],[self.Fz,self.F1]]) # F matrix: state transition matrix 
+        self.F = np.array(np.r_[np.c_[self.F1,self.Fz],np.c_[self.Fz,self.F1]]) # F matrix: state transition matrix
 
         # Dynamic model covariance
         self.q= 0.05 
 
         self.Q1 = np.array([[self.Ts**4,self.Ts**2],[self.Ts**2,self.Ts]])*self.q**2
-        self.Q = np.array([[self.Q1,self.Fz],[self.Fz,self.Q1]]) 
+        self.Q = np.array(np.r_[np.c_[self.Q1,self.Fz],np.c_[self.Fz,self.Q1]]) 
 
         # Initial Error Covariance
         ppp = 5
         self.P = np.diag([ppp,ppp,ppp,ppp]) 
-        self.H = np.array([1,0,0,00,0,1,0]) # H matrix: measurement model
+        self.H = np.array([[1,0,0,0],[0,0,1,0]]) # H matrix: measurement model
         self.R = 0.1*np.identity(2) # Measurement model covariance
 
         class ilda(object):

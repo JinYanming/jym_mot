@@ -23,7 +23,7 @@ def MOT_Initialization_Tracklets(rgbimg=None,Trk=None,detections=None,param=None
             ass_idx=tmp_ass_idx[pid]
         if len(np.nonzero(ass_idx)[0]) >= new_thr:#if the length of init tracketlet >5 then generate the tracklet
             Trk,param=mot_tracklets_components_setup(rgbimg,Trk,detections,fr,ass_idx,param,None,nargout=2)
-            for h in range(1,len(find(ass_idx != 0))):
+            for h in range(1,len(np.where(ass_idx != 0))):
                 Y_set(fr - h + 1).child[ass_idx(end() - h + 1)]=0
     
     print("MOT_Initialization_Tracklets over")

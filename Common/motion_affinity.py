@@ -1,15 +1,8 @@
-# Generated with SMOP  0.41
-from libsmop import *
-# /workspace/MOT/cmot-v1/Common/motion_affinity.m
-
+import numpy as np
     
-@function
 def motion_affinity(x=None,mean=None,var=None,*args,**kwargs):
-    varargin = motion_affinity.varargin
-    nargin = motion_affinity.nargin
-
-    ## Copyright (C) 2014 Seung-Hwan Bae
-## All rights reserved.
+    x = np.array(x)
+    mean = np.array(mean)
     
-    prob_pdf=exp(dot(dot(dot(- 0.5,(x - mean).T),inv(var)),(x - mean)))
-# /workspace/MOT/cmot-v1/Common/motion_affinity.m:5
+    prob_pdf=np.exp(np.dot(np.dot(np.dot(-0.5,(x - mean).T),np.linalg.inv(var)),(x - mean)))
+    return prob_pdf

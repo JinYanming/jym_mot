@@ -25,7 +25,6 @@ def affparam2mat(p = None,*args,**kwargs):
     th = p[3,:]
     r = p[4,:]
     phi = p[5,:]
-
     cth = np.cos(th).astype(np.float32)
     sth = np.sin(th).astype(np.float32)
     cph = np.cos(phi).astype(np.float32)

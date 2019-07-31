@@ -4,11 +4,11 @@ class HYP(object):
         self.score = None
         self.ystate = None
         self.new_tmpl = None
-class FMotion(object):
+class F_Motion(object):
     def __init__(self):
         self.X = None
         self.P = None
-class BMotion(object):
+class B_Motion(object):
     def __init__(self):
         self.X = None
         self.P = None
@@ -26,6 +26,6 @@ class Tracklet(object):
         self.last_update = 0
         self.state = []
         self.A_model = np.zeros(144)
-        self.F_Motion = FMotion()
-        self.B_Motion = BMotion()
+        self.FMotion = F_Motion()
+        self.BMotion = B_Motion()
         self.hyp = HYP()
