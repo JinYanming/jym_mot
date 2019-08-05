@@ -7,7 +7,7 @@ from mot_func.mot_appearance_model_generation import mot_appearance_model_genera
 def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_idx=None,param=None,tmp_label=None,*args,**kwargs):
     #y_idx the tracklet state
     ass_idx=y_idx
-    nofa=len(np.nonzero(y_idx)[0])
+    nofa=len(np.where(np.array(y_idx) != -1)[0])
     tracklet = Tracklet()#genenrate a new tracklet
     tracklet.Conf_prob = param.init_prob
     tracklet.type = 'High'
@@ -33,8 +33,8 @@ def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_
         #tracklet.state[tmp_idx][3,1]=detections(tmp_idx).h(ass_idx(tmp_idx))
         tmpl=mot_appearance_model_generation(img[tmp_idx],param,temp_state,False)
         Acc_tmpl=Acc_tmpl + tmpl.squeeze()[:,np.newaxis]
-    tracklet.state.reverse()
     
+    tracklet.state.reverse()
     # Appearnce Model
     tracklet.A_Model = Acc_tmpl / nofa
     # Forward Motion Model
@@ -47,7 +47,7 @@ def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_
     tracklet.FMotion.P[:,:,cfr - lt:]=PP
     tracklet.BMotion.X = []
     tracklet.BMotion.P = []
-    tracklet.hyp.score = np.array([0]*cfr)
+    tracklet.hyp.score = [0]*cfr
     tracklet.hyp.ystate = [[]]*cfr
     Trk.append(tracklet)
     return Trk,param

@@ -1,34 +1,20 @@
-# Generated with SMOP  0.41
-from libsmop import *
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m
-
-    
-@function
+import numpy as np
+from Common.estimation_size import estimation_size
+from kf_func.km_estimation import km_estimation
 def km_state_update(Trk=None,ymeas=None,param=None,fr=None,*args,**kwargs):
-    varargin = km_state_update.varargin
-    nargin = km_state_update.nargin
 
-    ## Copyright (C) 2014 Seung-Hwan Bae
-## All rights reserved.
     
     size_state=estimation_size(Trk,ymeas,fr)
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:5
-    XX=Trk.FMotion.X(arange(),end())
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:7
-    PP=Trk.FMotion.P(arange(),arange(),end())
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:8
-    if logical_not(isempty(ymeas)):
-        XX,PP=km_estimation(XX,ymeas(arange(1,2)),param,PP,nargout=2)
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:11
+    XX=Trk.FMotion.X[:,-1]
+    PP=Trk.FMotion.P[:,:,-1]
+    if not np.all(ymeas == 0):
+        XX,PP=km_estimation(XX,ymeas[0:2],param,PP)
     else:
-        XX,PP=km_estimation(XX,[],param,PP,nargout=2)
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:13
+        XX,PP=km_estimation(XX,[],param,PP)
     
-    pos_state=concat([[XX(1)],[XX(3)]])
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:16
-    Trk.state[fr]=concat([[pos_state],[size_state]])
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:17
-    Trk.FMotion.X[arange(),fr]=XX
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:19
-    Trk.FMotion.P[arange(),arange(),fr]=PP
-# /workspace/MOT/cmot-v1/kf_func/km_state_update.m:20
+    pos_state = np.r_[XX[0],XX[2]]
+    current_state = np.r_[pos_state[:,np.newaxis],size_state[:,np.newaxis]].squeeze()
+    Trk.state.append(current_state)
+    Trk.FMotion.X =  np.c_[Trk.FMotion.X,XX]
+    Trk.FMotion.P = np.concatenate((Trk.FMotion.P,PP),axis = 2)
+    return Trk

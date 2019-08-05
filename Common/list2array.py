@@ -1,11 +1,12 @@
 import numpy as np
-def lists2array(state,c = None):
+def lists2array(lists,c = None):
     """
-    state:a list which consist of list
+    lists:a list which consist of list
+    c:length of sublist
     """
-    state_array = np.zeros((c,0))
-    for list in state:
+    lists_array = np.zeros((c,0))
+    for list in lists:
         if len(list) !=0:
-            state_array = np.c_[state_array,np.array(list)[:,np.newaxis]]
-    return state_array
+            lists_array = np.c_[lists_array,np.array(list)[:,np.newaxis]]
+    return lists_array
             

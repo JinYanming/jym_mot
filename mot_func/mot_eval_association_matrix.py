@@ -2,6 +2,8 @@ import numpy as np
 from mot_func.mot_color_similarity import mot_color_similarity
 from mot_func.mot_motion_similarity import mot_motion_similarity
 from mot_func.mot_shape_similarity import mot_shape_similarity
+
+
 def mot_eval_association_matrix(Refer = None,Test = None,param = None,type_ = None,ILDA = None,*args,**kwargs):
 
     
@@ -11,12 +13,12 @@ def mot_eval_association_matrix(Refer = None,Test = None,param = None,type_ = No
         nproj = 0
     
     # Association score matrix
-    score_mat = np.zeros((len(Refer),len(Test)))
-    for i in range(1,len(Refer)):
+    score_mat = np.zeros((len(Refer),len(Test)))#generate a matrix with shape [len(tracklet,len(cur_detetcions))] 
+    for i in range(0,len(Refer)):
         refer_hist = np.ravel(Refer[i].hist) / sum(np.ravel(Refer[i].hist))
         refer_h = Refer[i].h
         refer_w = Refer[i].w
-        for j in range(1,len(Test)):
+        for j in range(0,len(Test)):
             # Appearance affinity
             test_hist = np.ravel(Test[j].hist) / sum(np.ravel(Test[j].hist))
             if (param.use_ILDA) and (ILDA.n_update !=  0) and (nproj > 2):

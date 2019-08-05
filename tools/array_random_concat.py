@@ -29,5 +29,7 @@ def array_random_concat(array_to_added = None,array_to_add = None,target_shape_l
 if __name__ == "__main__":
     a = np.zeros([3,4,1,3])
     b = np.zeros([3,4,1,3])
-    c = array_random_concat(a,b,4,3)
-    print(c.shape)
+    a = np.array([[1,2,3],[4,5,6]])
+    b = np.array([[11,22,33],[44,55,66]])
+    c = array_random_concat(a,b,2,1)
+    print(c)

@@ -44,6 +44,8 @@ from kf_func.kf_update import kf_update
 def kf_loop(X=None,P=None,H=None,R=None,Y=None,A=None,Q=None,*args,**kwargs):
     nargin = kf_loop.__code__.co_varnames
     nargin = len(nargin)#get the number of parameters
+    if not isinstance(Y,np.ndarray):
+        Y = np.array(Y)
     # Check the input parameters.
     if nargin < 5:
         error('Too few arguments')
@@ -62,12 +64,18 @@ def kf_loop(X=None,P=None,H=None,R=None,Y=None,A=None,Q=None,*args,**kwargs):
         Q = np.zeros(X.shape)
     
     # Space for the estimates.
-    MM = np.zeros((X.shape[0],Y.shape[1]))
-    PP = np.zeros((X.shape[0],X.shape[0],Y.shape[1]))
+    if len(Y.shape) < 2:
+        Y = Y[:,np.newaxis]
+    if len(X.shape) < 2:
+        X = X[:,np.newaxis]
+    try:
+        MM = np.zeros((X.shape[0],Y.shape[1]))
+        PP = np.zeros((X.shape[0],X.shape[0],Y.shape[1]))
+    except Exception:
+        print("dims of Y is less than 2!")
     for i in range(0,Y.shape[1]):
         X,P=kf_predict(X,P,A,Q,nargout=2)
         X,P,_,_,_,_=kf_update(X,P,Y[:,i],H,R,nargout=2)
-
         MM[:,i]=X.squeeze()
         PP[:,:,i]=P
     

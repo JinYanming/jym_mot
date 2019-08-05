@@ -8,11 +8,14 @@ class Config(object):
         ##get detections
         self.detections = None
         ## Get image lists
-        self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-DPM'
+        #self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-DPM'
+        self.dataset_path = '/data/dataset/MOT/ETH'
         self.img_path = self.dataset_path+'/img1/'
         self.img_List = None
         self.imgSeq_lenth = 0
-        self.imgsize = [1920,1080,3]
+        #self.imgsize = [1920,1080,3]
+        self.imgsize = [480,640,3]
+        self.imgtype = ".png"
         
 
         ## Common selfeter

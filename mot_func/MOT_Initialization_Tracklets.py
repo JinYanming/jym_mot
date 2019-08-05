@@ -15,13 +15,13 @@ def MOT_Initialization_Tracklets(rgbimg=None,Trk=None,detections=None,param=None
             child_idx=[]
             tmp_ass_idx=[]
             ass_ln=[]
-            for j in range(1,len(prt_idx)):
+            for j in range(0,len(prt_idx)):
                 child_idx[j]=mot_search_association(Y_set,fr,prt_idx(j))
                 tmp_ass_idx[j]=mot_return_ass_idx(child_idx[j],prt_idx(j),i,fr)
                 ass_ln[j]=len(find(tmp_ass_idx[j] != 0))
             __,pid=max(ass_ln,nargout=2)
             ass_idx=tmp_ass_idx[pid]
-        if len(np.nonzero(ass_idx)[0]) >= new_thr:#if the length of init tracketlet >5 then generate the tracklet
+        if len(np.where(np.array(ass_idx) != -1)[0]) >= new_thr:#if the length of init tracketlet >4 then generate the tracklet
             Trk,param=mot_tracklets_components_setup(rgbimg,Trk,detections,fr,ass_idx,param,None,nargout=2)
             for h in range(1,len(np.where(ass_idx != 0))):
                 Y_set(fr - h + 1).child[ass_idx(end() - h + 1)]=0

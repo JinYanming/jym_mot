@@ -16,9 +16,11 @@ def mot_generate_temp(img=None,state=None,sz=None,*args,**kwargs):
             element:x , y, w/sz[0], 0, h/w, 0
     """
     AFF_Generate = lambda states:[[item[0],item[1],item[2]/sz[0],0,item[3]/item[2],0]for item in states]
+    #AFF [x,y,w/64,0,h/w,0]
     AFF = AFF_Generate(state)
-    #AFF=concat([[state(1,arange())],[state(2,arange())],[state(3,arange()) / sz(1)],[zeros(1,N)],[state(4,arange()) / state(3,arange())],[zeros(1,N)]])
+    #AFF changed as [x,y,w/64,0,0,h/64]
     AFF=affparam2mat(AFF)
+    #warping by inerp2d and 
     tmpl=warpimg(img,AFF,sz)
     tmpl=tmpl.reshape([sz[0]*sz[1],N])
     return tmpl

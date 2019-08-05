@@ -16,9 +16,9 @@ def mot_appearance_model_generation(img=None,param=None,state=None,state_list=Fa
     else:
         hsv_img = img
     
-    h_img=hsv_img[0,:,:] / np.max(img[0,:,:])
-    s_img=hsv_img[1,:,:] / np.max(img[1,:,:])
-    v_img=hsv_img[2,:,:] / np.max(img[2,:,:])
+    h_img=hsv_img[:,:,0] / np.max(img[:,:,0])
+    s_img=hsv_img[:,:,1] / np.max(img[:,:,1])
+    v_img=hsv_img[:,:,2] / np.max(img[:,:,2])
     #v_img=double(hsv_img(arange(),arange(),3)) / double(max(max(img(arange(),arange(),3))))
     initS = state if state_list else [state]
     h_tmpl=mot_generate_temp(h_img,initS,param.tmplsize)

@@ -86,7 +86,10 @@ def kf_update(X = None,P = None,y = None,H = None,R = None,nargout= None,*args,*
     IS = (R + np.matmul(np.matmul(H,P),H.T))
     temp  =  np.matmul(P,H.T)
     K = np.matmul(np.matmul(P,H.T),np.matrix(IS).I)
-    X = X + np.matmul(K,(y[:,np.newaxis] - IM))
+    if len(y) > 0:
+        X = X + np.matmul(K,(y[:,np.newaxis] - IM))
+    else:
+        X = X + np.matmul(K,(- IM))
     P = P - np.matmul(np.matmul(K,IS),K.T)
     if nargout > 5:
         LH = gauss_pdf(y,IM,IS)

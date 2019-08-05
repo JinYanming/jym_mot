@@ -17,16 +17,20 @@ def mot_color_similarity(refer_hist=None,target_hist=None,var=None,*args,**kwarg
 def color_similarity_only_bhat(refer_hist=None,target_hist=None,*args,**kwargs):
 
     method=1
-    bhattcoeff=np.sum(np.sqrt(np.multiply(refer_hist,target_hist)))
+    bhattcoeff=np.sum(np.sqrt(refer_hist*target_hist))
     if bhattcoeff > 1:
-        r,p=corrcoef(refer_hist,target_hist,nargout=2)
-        likelihood=p(1,2)
+        #r,p=corrcoef(refer_hist,target_hist,nargout=2)
+        likelihood = None
+        print("color error")
+        #likelihood=p(1,2)
     else:
         likelihood=np.mean(bhattcoeff)
     
     return likelihood
     
 if __name__ == '__main__':
+    res = mot_color_similarity(np.array([1,2,3])/10,np.array([1,5,6])/10)
+    print(res)
     pass
     
 

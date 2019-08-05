@@ -1,45 +1,26 @@
-# Generated with SMOP  0.41
-from libsmop import *
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m
-
-    
-@function
+import numpy as np
+from kf_func.kf_loop import kf_loop
+from kf_func.kf_predict import kf_predict
 def km_estimation(X=None,Y=None,param=None,P=None,*args,**kwargs):
-    varargin = km_estimation.varargin
-    nargin = km_estimation.nargin
 
-    # X: object motion state, (x_pos, x_vel, y_pos, y_vel)
+# X: object motion state, (x_pos, x_vel, y_pos, y_vel)
 # Y: measurements, (x_pos, y_pos)
-    
-    ## Copyright (C) 2014 Seung-Hwan Bae
-## All rights reserved.
-    
-    if nargin < 4:
+    checkP_isNone = lambda x: False if isinstance(x,np.ndarray) else None
+    if checkP_isNone(P) == None:
         P=param.P
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:9
     
     H=param.H
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:12
     R=param.R
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:13
     Ts=param.Ts
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:16
-    F1=concat([[1,Ts],[0,1]])
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:17
-    Fz=zeros(2,2)
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:18
-    param.F = copy(concat([[F1,Fz],[Fz,F1]]))
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:19
+    F1=np.array([[1,Ts],[0,1]])
+    Fz=np.zeros((2,2))
+    param.F = np.c_[np.r_[F1,Fz],np.r_[Fz,F1]]
     A=param.F
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:22
     Q=param.Q
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:23
-    if logical_not(isempty(Y)):
-        MM,PP=kf_loop(X,P,H,R,Y,A,Q,nargout=2)
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:26
+    if not np.all(Y == 0):
+        MM,PP=kf_loop(X,P,H,R,Y,A,Q)
     else:
-        MM,PP=kf_predict(X,P,A,Q,nargout=2)
-# /workspace/MOT/cmot-v1/kf_func/km_estimation.m:28
+        MM,PP=kf_predict(X,P,A,Q)
     
     return MM,PP
     

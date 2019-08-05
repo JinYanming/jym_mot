@@ -5,14 +5,55 @@ import numpy as np
 base_dir = "/workspace/MOT/jym_cmot"
 sys.path.append(base_dir)
 from config import Config
-def draw_frame(img_url,save_url,img_name,fr_detecions):
+from prepare_data import prepare_data
+from Common.list2array import lists2array
+def draw_frame_for_state(img_url,save_url,img_name,Trk_set,xy_center = False):
+    detections = lists2array(Trk_set.state,4)
+    confidence = Trk_set.conf
+    label = Trk_set.label
+    if xy_center:
+        detections[:,0] = detections[:,0] - detections[:,2]/2
+        detections[:,1] = detections[:,1] - detections[:,3]/2
     img = cv2.imread(img_url + "/" + img_name)#read image
-    for detection in fr_detecions:#iterate detections in this frame
+    for i in range(0,len(detections[i]s)):#iterate detections[i]s in this frame
         ####draw the bbx on image
+        x1 = int(detections[i][0])
+        y1 = int(detections[i][1])
+        x2 = int(detections[i][0] + detections[i][2])
+        y2 = int(detections[i][1] + detections[i][3])
         cv2.rectangle(
                 img,
-                (detection[2], detection[3]),
-                (detection[2]+detection[4], detection[3]+detection[5]),
+                (x1 , y1),
+                (x2 , y2),
+                (128+96*(-confidence[i]), 0, 128+96*(confidence[i])),
+                4
+                )
+        cv2.putText(
+            img,
+            str(label[i]),
+            (int(detections[i][0]+detections[i][2]/2-30), int(detections[i][1]+detections[i][3]/2+25)),
+            cv2.FONT_HERSHEY_COMPLEX,
+            1.2,
+            (0, 255, 0),
+            thickness=4)
+    cv2.imwrite(save_url+'/'+"tracked"+img_name, img)
+def draw_frame(img_url,save_url,img_name,fr_detections,xy_center = False):
+    fr_detections = lists2array(fr_detections,7)
+    fr_detections = np.swapaxes(fr_detections,0,1)
+    if xy_center:
+        fr_detections[:,2] = fr_detections[:,2] - fr_detections[:,4]/2
+        fr_detections[:,3] = fr_detections[:,3] - fr_detections[:,5]/2
+    img = cv2.imread(img_url + "/" + img_name)#read image
+    for detection in fr_detections:#iterate detections in this frame
+        ####draw the bbx on image
+        x1 = int(detection[2])
+        y1 = int(detection[3])
+        x2 = int(detection[2] + detection[4])
+        y2 = int(detection[3] + detection[5])
+        cv2.rectangle(
+                img,
+                (x1 , y1),
+                (x2 , y2),
                 (128+96*(-detection[6]), 0, 128+96*(detection[6])),
                 4
                 )
@@ -25,8 +66,14 @@ def draw_frame(img_url,save_url,img_name,fr_detecions):
             (0, 255, 0),
             thickness=4)
     cv2.imwrite(save_url+'/'+"tracked"+img_name, img)
+def MOT_Tracking_Reauslt_Realtime(Trk_sets,fr,param):
+    img_path = param.img_path
+    save_path = "./result"
+    current_Trks_states = Trk_sets[fr]
+    imgName = param.img_List[fr]
+    draw_frame(img_path,save_path,imgName,Trk_set[fr],True)
 
-def MOT_Tracking_Results(Trk,Trk_sets,fr,param):
+def MOT_Tracking_Results(Trk_sets,fr,param):
     print("MOT_Tracking_Results start")
     root_path = param.dataset_path
     img_list = param.img_List
@@ -39,19 +86,13 @@ def MOT_Tracking_Results(Trk,Trk_sets,fr,param):
     print("MOT_Tracking_Results over")
     return Trk_sets
 if __name__ == "__main__":
-    img_name = "000001.jpg"
-    fr_detections = np.array([
-            [1,12,1359.1,413.27,120.26,362.77,2.3092],
-            [1,33,571.03,402.13,104.56,315.68,1.5028],
-            [1,1,650.8,455.86,63.98,193.94,0.33276],
-            [1,34,721.23,446.86,41.871,127.61,0.27401],
-            [1,2,454.06,434.36,97.492,294.47,0.20818],
-            [1,4,1254.6,446.72,33.822,103.47,0.14776],
-            [1,5,1301.1,237.38,195.98,589.95,0.051818],
-            [1,1,1480.3,413.27,120.26,362.77,-0.020474],
-            [1,12,552.72,473.9,29.314,89.943,-0.087553],
-            [1,23,1097,433,39,119,-0.17964],
-            [1,42,543.19,442.1,44.948,136.84,-0.3683],
-            [1,4,1017,425,39,119,-0.41789]
-            ],np.float32)
-    draw_frame("/workspace/MOT/jym_cmot/tools","./",img_name,fr_detections)
+    img_name = "image_00000000_0.png"
+    param = Config()
+    prepare_data(param)
+    detections = param.detections
+    print(detections[0])
+    imgName_list = param.img_List
+    for item in zip(detections,imgName_list):
+        fr_detections = item[0]
+        imgName = item[1]
+        draw_frame(param.img_path,"./mark",imgName,fr_detections,True)

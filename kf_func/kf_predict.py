@@ -83,7 +83,6 @@ def kf_predict(x=None,P=None,A=None,Q=None,B=None,u=None,*args,**kwargs):
     if np.all(B==0) and ~np.all(u==0):
         B=eye(size(x,1),size(u,1))
     
-    
     # Perform prediction
     if u == None:
         x= np.matmul(A,x)

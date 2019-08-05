@@ -1,41 +1,26 @@
-# Generated with SMOP  0.41
-from libsmop import *
-# /workspace/MOT/cmot-v1/Common/estimation_size.m
-
-    
-@function
+import numpy as np
+from tools.ListGiant import ListIndice2d
 def estimation_size(Trk=None,ystate=None,fr=None,*args,**kwargs):
-    varargin = estimation_size.varargin
-    nargin = estimation_size.nargin
 
-    ## Copyright (C) 2014 Seung-Hwan Bae
-## All rights reserved.
     
     init_time=Trk.ifr
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:6
     nof_s=4
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:7
-    sum_size=Trk.state[end()](arange(3,4))
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:9
+    sum_size=Trk.state[-1][2:4]
     if fr == Trk.last_update:
-        size_state=ystate(arange(3,4))
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:11
+        size_state=ystate[2:4]
     else:
         if fr > init_time + 3:
-            for j in arange(1,nof_s).reshape(-1):
-                sum_size=sum_size + Trk.state[end() - j](arange(3,4))
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:15
+            for j in range(0,nof_s):
+                sum_size=sum_size + Trk.state[-1-j][2:]
             size_state=sum_size / (nof_s + 1)
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:17
         else:
-            all_est=cell2mat(Trk.state)
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:19
-            sum_size=sum_size + sum(all_est(arange(3,4),arange()),2)
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:20
+            all_est=Trk.state
+            all_est=np.array(Trk.state)
+            print(all_est.shape)
+            all_est_select=ListIndice2d(all_est,None,[2,4])
+            sum_size=sum_size + np.sum(all_est,0)
             size_state=sum_size / (size(all_est,2) + 1)
-# /workspace/MOT/cmot-v1/Common/estimation_size.m:21
-    
-    return size_state
+    return np.array(size_state)
     
 if __name__ == '__main__':
     pass

@@ -12,8 +12,6 @@ def mot_search_association(Y=None,fr=None,prt_idx=None,*args,**kwargs):
         ass_idx:the tracklet of this object
     """
     print("mot_search_association start")
-    #for item in Y:
-    #    print(item.child)
     flg=1
     ct= 1
     ass_idx=[]
