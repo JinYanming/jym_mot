@@ -11,9 +11,8 @@ def mot_search_association(Y=None,fr=None,prt_idx=None,*args,**kwargs):
         ass_idx
         ass_idx:the tracklet of this object
     """
-    print("mot_search_association start")
-    flg=1
-    ct= 1
+    flg = 1
+    ct= 0
     ass_idx=[]
     check_none = lambda x: True if len(x) >= 1 and x[0]!=-1 else False
     if check_none(prt_idx):
@@ -33,7 +32,6 @@ def mot_search_association(Y=None,fr=None,prt_idx=None,*args,**kwargs):
             #   flg=0
 
     
-    print("mot_search_association over")
     ass_idx.reverse()
     return ass_idx
     

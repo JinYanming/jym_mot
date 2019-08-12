@@ -1,5 +1,6 @@
 import numpy as np
-from Common.motion_affinity import motion_affinity    
+from Common.motion_affinity import motion_affinity
+from kf_func.km_estimation import km_estimation
 def mot_motion_similarity(Refer=None,Test=None,param=None,type_=None,*args,**kwargs):
 
     
@@ -18,7 +19,7 @@ def mot_motion_similarity(Refer=None,Test=None,param=None,type_=None,*args,**kwa
                 BX=Test.BMotion.X[:,-1]
                 BP=Test.BMotion.P[:,:,-1]
                 while fgap > 0:
-
+                    BP = BP.squeeze()
                     BX,BP=km_estimation(BX,[],param,BP,nargout=2)
                     fgap=fgap - 1
 
@@ -29,7 +30,7 @@ def mot_motion_similarity(Refer=None,Test=None,param=None,type_=None,*args,**kwa
                 refer_pos=[BX[0],BX[2]]
                 test_pos=[Refer.FMotion.X[1,-1],Refer.FMotion.X[3,-1]]
                 mot_sim2=motion_affinity(refer_pos,test_pos,pos_var)
-                mot_sim=dot(mot_sim1,mot_sim2)
+                mot_sim=np.dot(mot_sim1,mot_sim2)
             else:
                 mot_sim=0
         else:

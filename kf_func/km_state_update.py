@@ -7,7 +7,7 @@ def km_state_update(Trk=None,ymeas=None,param=None,fr=None,*args,**kwargs):
     size_state=estimation_size(Trk,ymeas,fr)
     XX=Trk.FMotion.X[:,-1]
     PP=Trk.FMotion.P[:,:,-1]
-    if not np.all(ymeas == 0):
+    if len(ymeas) != 0:
         XX,PP=km_estimation(XX,ymeas[0:2],param,PP)
     else:
         XX,PP=km_estimation(XX,[],param,PP)

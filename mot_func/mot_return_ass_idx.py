@@ -14,7 +14,7 @@ def mot_return_ass_idx(child_idx=None,prt_idx=None,root_idx=None,c_fr=None,*args
         all_idx:the
     """
 
-    all_idx = [0]*c_fr#shape [1,5]
+    all_idx = [[-1]]*(c_fr+1)#shape [1,5]
     all_idx[-1] = [root_idx]
     all_idx[-2] = prt_idx
     nofc = len(child_idx)

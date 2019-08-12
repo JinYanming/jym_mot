@@ -20,7 +20,7 @@ def MOT_Confidence_Update(Trk=None,param=None,fr=None,lambda_=None,*args,**kwarg
                     break
                 L_T=L_T + 1
                 ass_idx.append(ii)
-            ass_idx = np.array(ass_idx)
+            ass_idx = np.array(ass_idx).astype(np.int)
             L_T_backwards = lambda x:1/x if x !=0 else np.Inf
             Conf_prob=np.dot(np.dot(L_T_backwards(L_T),np.sum(hyp_score[ass_idx])),(1 - np.exp(np.dot(- lambda_,np.sqrt(L_T)))))
             Trk[i].Conf_prob = Conf_prob

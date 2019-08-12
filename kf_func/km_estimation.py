@@ -17,11 +17,11 @@ def km_estimation(X=None,Y=None,param=None,P=None,*args,**kwargs):
     param.F = np.c_[np.r_[F1,Fz],np.r_[Fz,F1]]
     A=param.F
     Q=param.Q
-    if not np.all(Y == 0):
+    if len(Y) != 0:
         MM,PP=kf_loop(X,P,H,R,Y,A,Q)
     else:
         MM,PP=kf_predict(X,P,A,Q)
-    
+        PP=PP[:,:,np.newaxis]
     return MM,PP
     
 if __name__ == '__main__':

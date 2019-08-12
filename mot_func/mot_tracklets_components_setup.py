@@ -4,7 +4,7 @@ from Common.Labelling import Labelling
 
 from mot_func.mot_motion_model_generation import mot_motion_model_generation
 from mot_func.mot_appearance_model_generation import mot_appearance_model_generation
-def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_idx=None,param=None,tmp_label=None,*args,**kwargs):
+def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_idx=None,param=None,tmp_label=None,initTracklet = False,*args,**kwargs):
     #y_idx the tracklet state
     ass_idx=y_idx
     nofa=len(np.where(np.array(y_idx) != -1)[0])
@@ -21,14 +21,18 @@ def mot_tracklets_components_setup(img=None,Trk=None,detections=None,cfr=None,y_
         param,idx=Labelling(param)
         tracklet.label = idx
     
-    tracklet.ifr = cfr - nofa + 1
+    tracklet.ifr = cfr - nofa
     tracklet.efr = 0
-    tracklet.last_update = cfr
+    tracklet.last_update = cfr - 1
     Acc_tmpl = np.zeros(((param.Bin*3),param.subregion))
     for i in range(0,nofa):#from crruent frame to  track the len(ass_idx) privious frames detections
-        tmp_idx=cfr - i -1
         state = np.array((4))
-        temp_state = detections[tmp_idx][ass_idx[tmp_idx][0]][2:6]
+        if initTracklet:
+            tmp_idx=cfr - i -1
+            temp_state = np.array(detections[tmp_idx][ass_idx[tmp_idx][-1]][2:6])
+        else:
+            tmp_idx=cfr - i -1
+            temp_state = np.array(detections[tmp_idx][ass_idx[tmp_idx][0]])
         tracklet.state.append(temp_state)
         #tracklet.state[tmp_idx][3,1]=detections(tmp_idx).h(ass_idx(tmp_idx))
         tmpl=mot_appearance_model_generation(img[tmp_idx],param,temp_state,False)

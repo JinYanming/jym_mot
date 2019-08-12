@@ -93,7 +93,6 @@ def kf_predict(x=None,P=None,A=None,Q=None,B=None,u=None,*args,**kwargs):
     else:
         x=np.matmul(A,x) + np.matmul(B,u)
         P=np.matmul(np.matmul(A,P),A.T) + Q
-    
-
+        P = P[:,:,np.newaxis]
     return x,P
     

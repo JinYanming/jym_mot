@@ -11,7 +11,7 @@ def MOT_Tracking_Results(Trk=None,Trk_sets=None,fr=None,*args,**kwargs):
     for i in range(0,len(low_indx)):
         efr=Trk[low_indx[i]].efr
         if abs(efr - fr) > 5:
-            del_indx.append[i]
+            del_indx.append(i)
     if len(Trk_sets) == 0:
         for i in range(0,fr):
             Trk_sets.append(Trk_Set())

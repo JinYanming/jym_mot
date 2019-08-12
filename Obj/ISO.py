@@ -1,3 +1,6 @@
+class Node(object):
+    def __init__(self):
+        self.child = []
 class ISO(object):
     def __init__(self):
 

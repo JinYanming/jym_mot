@@ -16,13 +16,15 @@ def mot_motion_model_generation(Trk=None,param=None,type_=None,*args,**kwargs):
         Yr=Y
     else:
         if 'Backward' == type_:
-            Y=state_lists2array(Trk.state)
-            X[0,:] = Y[1,-1]
+            Y=lists2array(Trk.state,4)
+            X = np.array([0]*4)
+            X = X[:,np.newaxis]
+            X[0,:] = Y[0,0]
             X[1,:] = 0
-            X[2,:] = Y[2,-1]
+            X[2,:] = Y[1,0]
             X[3,:] = 0
-            Y[2:3,:] = np.array([])
-            Yr = Y[:,::-1]
+            Y = np.delete(Y,[2,3],0)
+            Yr = Y
     
     XX,PP=km_state_est(X,Yr,param,nargout=2)
     

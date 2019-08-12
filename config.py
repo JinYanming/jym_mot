@@ -2,13 +2,11 @@ import numpy as np
 import os
 class Config(object):
     def __init__(self):
-        ## Copyright (C) 2014 Seung-Hwan Bae
-        ## All rights reserved.
-
+        self.draw_while_track = True
         ##get detections
         self.detections = None
         ## Get image lists
-        #self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-DPM'
+        #self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-FRCNN'
         self.dataset_path = '/data/dataset/MOT/ETH'
         self.img_path = self.dataset_path+'/img1/'
         self.img_List = None
@@ -75,6 +73,25 @@ class Config(object):
         self.ILDA.duration = 5
         self.ILDA.feat_data = []
         self.ILDA.feat_label = []
+        self.colormap=np.array([
+                [0,0,0.75],
+                [0,0,1],
+                [0,0.25,1],
+                [0,0.5,1],
+                [0,0.75,1],
+                [0,1,1],
+                [0.25,1,0.75],
+                [0.5,1,0.75],
+                [0.75,1,0.25],
+                [1,1,0],
+                [1,0.75,0],
+                [1,0.5,0],
+                [1,0.25,0],
+                [1,0,0,],
+                [0.75,0,0],
+                [0.5,0,0]
+                ]
+                )
 
 
 

@@ -19,8 +19,8 @@ def MOT_Type_Update(rgbimg=None,Trk=None,type_thr=None,cfr=None,*args,**kwargs):
                     Trk[i].type = 'High'
                 efr=Trk[i].efr
                 if np.abs(cfr - efr) >= max_frame:
-                    del_idx=concat([del_idx,i])
-                    lb_idx=concat([lb_idx,Trk[i].label])
+                    del_idx.append(i)
+                    lb_idx.append(Trk[i].label)
     
     R_pos = rgbimg.shape[:2]
     L_pos=np.array([0,0])
@@ -28,7 +28,7 @@ def MOT_Type_Update(rgbimg=None,Trk=None,type_thr=None,cfr=None,*args,**kwargs):
     for i in range(0,len(Trk)):
         tstates=Trk[i].state[-1]
         if np.isnan(tstates[0]):
-            del_idx = [del_idx,i]
+            del_idx.append(i)
         else:
             fmotion=Trk[i].state[-1]
             C_pos = np.array(fmotion[0:2])
@@ -42,8 +42,10 @@ def MOT_Type_Update(rgbimg=None,Trk=None,type_thr=None,cfr=None,*args,**kwargs):
     
     
     del_idx = np.array(del_idx)
-    if not np.all(del_idx == 0):
-        Trk[del_idx]=[]
+    if len(del_idx) != 0:
+        print(del_idx)
+        for idx in sorted(del_idx,reverse=True):
+            Trk.pop(idx)
     
     return Trk
     

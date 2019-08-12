@@ -6,6 +6,7 @@ from Obj.Obs_info import Obs_info
 from Obj.Tracklet import Tracklet
 from Obj.Z_item import Z_item
 
+from tools.ListGiant import *
 from mot_func.mot_appearance_model_generation import mot_appearance_model_generation
 from mot_func.mot_eval_association_matrix import mot_eval_association_matrix
 from mot_func.mot_association_hungarian import mot_association_hungarian
@@ -62,6 +63,9 @@ def MOT_Local_Association(Trk = None,detections = None,Obs_grap = None,param = N
             #generate the score matrix between Tracklet with high confidence and Detections in current frame
 
             score_mat = mot_eval_association_matrix(Trk_high,Z_set,param,'Obs',ILDA)
+            confidence = []
+            for i in Trk:
+                confidence.append(i.Conf_prob)
             print(score_mat)
             #matching by hungarian Algorithm the the socre matrix shape should be[len(high_trk),len(high_trk]
             matching,__ = mot_association_hungarian(score_mat,thr,nargout = 2)
@@ -72,8 +76,11 @@ def MOT_Local_Association(Trk = None,detections = None,Obs_grap = None,param = N
                     ta_idx = tidx[ass_idx_row]
                     ass_idx_col = matching[1,i]
                     ya_idx = yidx[ass_idx_col]
-                    Trk[ta_idx].hyp.score.append(score_mat[matching[0,i],matching[1,i]])
-                    Trk[ta_idx].hyp.ystate.append(ystate[ya_idx])
+                    ListInsert(Trk[ta_idx].hyp.score,fr,score_mat[matching[0,i],matching[1,i]],0)
+                    ListInsert(Trk[ta_idx].hyp.ystate,fr,ystate[ya_idx],[])
+                    
+                    #Trk[ta_idx].hyp.score.append(score_mat[matching[0,i],matching[1,i]])
+                    #Trk[ta_idx].hyp.ystate.append(ystate[ya_idx])
                     Trk[ta_idx].hyp.new_tmpl  =  yhist[:,:,ya_idx]
                     Trk[ta_idx].last_update  =  fr
                     Obs_grap[fr].iso_idx[ya_idx] = 0
