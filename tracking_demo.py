@@ -79,6 +79,8 @@ clear_subfile("./result/")
 for fr in range(init_frame,frame_end):
     if fr == 329:
         print(111111222)
+    #for i in range(0,len(Trk)):
+    #    print(Trk[i].hyp.ystates_ids)
     filename = param.img_path+param.img_List[fr]
     bgrimg = cv2.imread(filename)
     b,g,r = cv2.split(bgrimg)
@@ -87,13 +89,13 @@ for fr in range(init_frame,frame_end):
     Trk,Obs_grap,Obs_info = MOT_Local_Association(Trk,detections,Obs_grap,param,fr,rgbimg,3)
     Trk,Obs_grap = MOT_Global_Association(Trk,Obs_grap,Obs_info,param,fr)
     Trk = MOT_Confidence_Update(Trk,param,fr,param.lambda_)
-    Trk = MOT_Type_Update(rgbimg,Trk,param.type_thr,fr)
+    Trk = MOT_Type_Update(rgbimg,Trk,param,fr)
     Trk = MOT_State_Update(Trk,param,fr)
     Trk,param,Obs_grap = MOT_Generation_Tracklets(init_img_set,Trk,detections,param,Obs_grap,fr)
     if param.use_ILDA:
         ILDA = MOT_Online_Appearance_Learning(rgbimg,img_path,img_List,fr,Trk,param,ILDA)
     ## Tracking Results
-    Trk_sets = MOT_Tracking_Results(Trk,Trk_sets,fr)
+    Trk_sets = MOT_Tracking_Results(Trk,Trk_sets,fr,param)
     if fr == 5 and param.draw_while_track:
         for i in range(0,5):
             MOT_Tracking_Reauslt_Realtime(Trk_sets,i,param)
@@ -106,5 +108,7 @@ print("Tracking Done...")
 end_time = time.time()
 spend_time = end_time-start_time
 print("Tracking: Total Time:{}|FPS :{}".format(spend_time,len(param.img_List)/spend_time))
+print("Total Tracklet:{}Total Object:{},TT-To:{}".format(param.total_tracklet_count,param.object_count,param.total_tracklet_count-param.object_count))
+print("IDS:{}".format(param.ids))
 if param.draw_while_track == False:
     pass

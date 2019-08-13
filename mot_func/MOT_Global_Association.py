@@ -18,6 +18,7 @@ def MOT_Global_Association(Trk = None,Obs_grap = None,Obs_info = None,param = No
     yidx = np.where(Obs_grap[fr].iso_idx  ==  1)[0]
     yhist = Obs_info.yhist
     ystate = Obs_info.ystate
+    ystates_ids = Obs_info.ystates_ids
     High_trk = []
     Low_trk = []
     Y_set = []
@@ -81,9 +82,11 @@ def MOT_Global_Association(Trk = None,Obs_grap = None,Obs_info = None,param = No
                 for kk in range(fr1,numHyp):
                     Trk[y_idx].hyp.score[kk] = Trk[t_idx].hyp.score[kk]
                     Trk[y_idx].hyp.ystate[kk] = Trk[t_idx].hyp.ystate[kk]
+                    Trk[y_idx].hyp.ystates_ids[kk] = Trk[t_idx].hyp.ystates_ids[kk]
                 for kk in range(numHyp + 1,fr):
                     Trk[y_idx].hyp.score[kk] = param.init_prob
                     Trk[y_idx].hyp.ystate[kk] = []
+                    Trk[y_idx].hyp.ystates_ids[kk] = -1
                 Trk[y_idx].A_Model  =  alpha*Trk[t_idx].A_Model + (1 - alpha)*Trk[y_idx].A_Model
                 XX = []
                 numState = len(Trk[y_idx].state)
@@ -113,8 +116,10 @@ def MOT_Global_Association(Trk = None,Obs_grap = None,Obs_info = None,param = No
                 for i in range(len(Trk[t_idx].hyp.score),fr):
                     Trk[t_idx].hyp.score.append(0)
                     Trk[t_idx].hyp.ystate.append([])
+                    Trk[t_idx].hyp.ystates_ids.append(-1)
                 Trk[t_idx].hyp.score.append(Affinity[m])
                 Trk[t_idx].hyp.ystate.append(ystate[y_idx])
+                Trk[t_idx].hyp.ystates_ids.append(ystates_ids[y_idx])
                 Trk[t_idx].hyp.new_tmpl  =  yhist[:,:,y_idx]
                 Trk[t_idx].last_update  =  fr
                 Obs_grap[fr].iso_idx[y_idx] = 0

@@ -1,11 +1,13 @@
 import numpy as np
 from mot_func.mot_is_reg import mot_is_reg
-def MOT_Type_Update(rgbimg=None,Trk=None,type_thr=None,cfr=None,*args,**kwargs):
+from mot_func.mot_count_ids import mot_count_ids
+def MOT_Type_Update(rgbimg=None,Trk=None,param=None,cfr=None,*args,**kwargs):
 
     
     del_idx=[]
     lb_idx=[]
     max_frame=50
+    type_thr = param.type_thr
     for i in range(0,len(Trk)):
         Conf_prob=Trk[i].Conf_prob
         type_=Trk[i].type
@@ -45,6 +47,7 @@ def MOT_Type_Update(rgbimg=None,Trk=None,type_thr=None,cfr=None,*args,**kwargs):
     if len(del_idx) != 0:
         print(del_idx)
         for idx in sorted(del_idx,reverse=True):
+            mot_count_ids(Trk[idx],param)
             Trk.pop(idx)
     
     return Trk

@@ -6,7 +6,7 @@ def lists2array(lists,c = None):
     """
     lists_array = np.zeros((c,0))
     for list in lists:
-        if len(list) !=0:
+        if len(list) != 0:
             lists_array = np.c_[lists_array,np.array(list)[:,np.newaxis]]
     return lists_array
             

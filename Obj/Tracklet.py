@@ -4,6 +4,7 @@ class HYP(object):
         self.score = None
         self.ystate = None
         self.new_tmpl = None
+        self.ystates_ids = None
 class F_Motion(object):
     def __init__(self):
         self.X = None

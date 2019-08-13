@@ -19,6 +19,8 @@ def prepare_data(param):
     detections = []
     fr_detections = []
     cur_det = 1
+    #count object numbers 
+    object_id_list = []
     deal = lambda x:x.strip("\n").split(",")#seperate the lines with ", " and remove the "\n"
     str2float = lambda x:[float(i) for i in x]
     ###get detections
@@ -27,6 +29,8 @@ def prepare_data(param):
         detection = str2float(detection)
         detection[2] = detection[2]-1
         detection[3] = detection[3]-1
+        if detection[1] not in object_id_list:
+            object_id_list.append(detection[1])
         if detection[0] == cur_det:
             fr_detections.append(detection[:7])
         else:
@@ -35,6 +39,7 @@ def prepare_data(param):
             fr_detections.append(detection[:7])
             cur_det = detection[0]
     param.detections = detections
+    param.object_count = len(object_id_list)
     det_file.close()
     img_dir = param.dataset_path+"/img1"
     #img_list = get_sub_files(img_dir,param)

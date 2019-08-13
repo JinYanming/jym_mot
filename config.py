@@ -2,7 +2,14 @@ import numpy as np
 import os
 class Config(object):
     def __init__(self):
+        ####
+        self.object_count = 0
+        self.total_tracklet_count = 0
+        self.ids = 0
+        ####
         self.draw_while_track = True
+        self.xy_center = True
+
         ##get detections
         self.detections = None
         ## Get image lists
@@ -34,8 +41,8 @@ class Config(object):
         self.tmplsize = [64, 32]                           # template size (height, width)
         self.Bin = 48                                      # # of Histogram Bin
         self.vecsize = self.tmplsize[0]*self.tmplsize[1]
-        self.subregion = 1                                
-        self.subvec = int(self.vecsize/self.subregion)        
+        self.subregion = 1
+        self.subvec = int(self.vecsize/self.subregion)
         self.color = 'RGB'                            # RGB or HSV
 
 

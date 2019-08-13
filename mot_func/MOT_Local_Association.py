@@ -17,6 +17,7 @@ def MOT_Local_Association(Trk = None,detections = None,Obs_grap = None,param = N
     
     Z_meas = detections[fr]#represent the detections in current frame
     Z_meas = [detection[2:6] for detection in Z_meas]#choose the location(x,y,w,h) from raw data 
+    ystates_ids = [detection[1] for detection in detections[fr]]
     ystate = Z_meas
     obs_grap = Obs_Graph()
     Obs_grap.append(obs_grap)
@@ -24,10 +25,12 @@ def MOT_Local_Association(Trk = None,detections = None,Obs_grap = None,param = N
     obs_info = Obs_info()
     obs_info.ystate  =  []
     obs_info.yhist  =  []
+    obs_info.ystates_ids = []
     if ~(np.all(ystate == 0)):
         yhist = mot_appearance_model_generation(rgbimg,param,ystate,True)#get the apperance model of the detections in current frame
         obs_info.ystate  =  ystate
         obs_info.yhist  =  yhist
+        obs_info.ystates_ids = ystates_ids
         tidx,_,_ = Idx2Types(Trk,'High')#return the index of high confidence Tracklet
         yidx = np.where(Obs_grap[fr].iso_idx  ==  1)[0]#return the index of detections in current frame
         if len(tidx) != 0 and len(yidx) != 0:
@@ -78,6 +81,7 @@ def MOT_Local_Association(Trk = None,detections = None,Obs_grap = None,param = N
                     ya_idx = yidx[ass_idx_col]
                     ListInsert(Trk[ta_idx].hyp.score,fr,score_mat[matching[0,i],matching[1,i]],0)
                     ListInsert(Trk[ta_idx].hyp.ystate,fr,ystate[ya_idx],[])
+                    ListInsert(Trk[ta_idx].hyp.ystates_ids,fr,ystates_ids[ya_idx],-1)
                     
                     #Trk[ta_idx].hyp.score.append(score_mat[matching[0,i],matching[1,i]])
                     #Trk[ta_idx].hyp.ystate.append(ystate[ya_idx])

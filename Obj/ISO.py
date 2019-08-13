@@ -6,3 +6,4 @@ class ISO(object):
 
         self.meas = None
         self.node = None
+        self.ystates_ids = None

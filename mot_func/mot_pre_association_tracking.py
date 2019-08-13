@@ -11,10 +11,16 @@ def mot_pre_association_tracking(ISO=None,start_frame=None,end_frame=None,*args,
     for i in range(0,len(init_det)):
         ISO.node[start_frame].child.append([-1])
     if len(init_det) != 0:
-        detections=ISO.meas
+        detections=ISO.meas.copy()
         for q in range(start_frame + 1,end_frame):
-            prev_det=np.array(detections[q - 1])
-            cur_det=np.array(detections[q])
+            if len(detections[q-1]) != 0:
+                prev_det=np.array(detections[q - 1])[:,2:]
+            else:
+                prev_det=np.array(detections[q - 1])
+            if len(detections[q]) != 0:
+                cur_det=np.array(detections[q])[:,2:]
+            else:
+                cur_det=np.array(detections[q])
             #for i in range(0,len(cur_det)):
             #    ISO.node[q].child.append([-1])
             asso_idx=[]
