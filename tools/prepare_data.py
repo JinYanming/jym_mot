@@ -14,7 +14,11 @@ def get_sub_files(rootdir,param):
     return sub_files
 def prepare_data(param):
     ##### path config
-    det_file = open(param.dataset_path+"/det/det.txt")
+
+    if param.use_gt_detections == False:
+        det_file = open(param.dataset_path+"/det/det.txt")
+    else:
+        det_file = open(param.dataset_path+"/gt/gt.txt")
     detlines = det_file.readlines()
     detections = []
     fr_detections = []
@@ -44,7 +48,7 @@ def prepare_data(param):
     img_dir = param.dataset_path+"/img1"
     #img_list = get_sub_files(img_dir,param)
     img_list = []
-    for i in range(0,400):
+    for i in range(0,param.imgSeq_lenth):
         imgName = "image_"+"{:08d}".format(i)+"_0"+param.imgtype
         img_list.append(imgName)
     param.img_List = img_list

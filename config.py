@@ -7,9 +7,11 @@ class Config(object):
         self.total_tracklet_count = 0
         self.ids = 0
         ####
+        self.imgSeq_lenth = 400
+        ###
         self.draw_while_track = True
         self.xy_center = True
-
+        self.use_gt_detections = False
         ##get detections
         self.detections = None
         ## Get image lists
@@ -17,7 +19,6 @@ class Config(object):
         self.dataset_path = '/data/dataset/MOT/ETH'
         self.img_path = self.dataset_path+'/img1/'
         self.img_List = None
-        self.imgSeq_lenth = 0
         #self.imgsize = [1920,1080,3]
         self.imgsize = [480,640,3]
         self.imgtype = ".png"

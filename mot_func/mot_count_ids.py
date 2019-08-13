@@ -1,7 +1,6 @@
 def mot_count_ids(Tracklet,param):
     id_list = Tracklet.hyp.ystates_ids
 
-    print(id_list)
     count = 0
     prev_id = id_list[0]
     for i in range(1,len(id_list)):
