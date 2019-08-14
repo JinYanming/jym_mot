@@ -7,10 +7,10 @@ from config import Config
 def img2mp4(param):
     path = './result/'
     filelist = os.listdir(path)
-    if param.dataset == "ETH"
+    if param.dataset == "ETH":
         fps = 12 #视频每秒12帧
         getId = lambda imgName:int(imgName[-14:-6])
-    elif param.dataset == "MOT"
+    elif param.dataset == "MOT":
         fps = 24 #视频每秒24帧
         getId = lambda imgName:int(imgName[:-4])
     size = (param.imgsize[1],param.imgsize[0]) #需要转为视频的图片的尺寸

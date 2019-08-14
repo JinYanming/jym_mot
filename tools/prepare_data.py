@@ -55,8 +55,10 @@ def prepare_data(param):
     _,imgSeq_length = get_sub_files(img_dir,param)
     param.imgSeq_length = imgSeq_length
     for i in range(0,param.imgSeq_length):
-        imgName = "image_"+"{:08d}".format(i)+"_0"+param.imgtype
-        #imgName = "{:06d}".format(i+1)+param.imgtype
+        if param.dataset == "ETH":
+            imgName = "image_"+"{:08d}".format(i)+"_0"+param.imgtype
+        elif param.dataset == "MOT":
+            imgName = "{:06d}".format(i+1)+param.imgtype
         img_list.append(imgName)
     param.img_List = img_list
     param.imgSeq_lenth = len(img_list)

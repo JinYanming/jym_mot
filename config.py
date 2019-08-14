@@ -2,7 +2,27 @@ import numpy as np
 import os
 class Config(object):
     def __init__(self):
+        #parameters need to modify frequently
+        #self.dataset = "ETH"
         self.dataset = "ETH"
+        self.draw_while_track = True
+        if self.dataset == "MOT":
+            self.imgtype = ".jpg"
+            self.imgsize = [1080,1920,3]
+            self.xy_center = False
+            self.use_gt_detections = True
+            self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-FRCNN'
+        elif self.dataset == "ETH":
+            self.xy_center = True
+            self.use_gt_detections = False
+            self.dataset_path = '/data/dataset/MOT/ETH'
+            self.imgsize = [480,640,3]
+            self.imgtype = ".png"
+        ##get detections
+        self.detections = None
+        ## Get image lists
+        self.img_path = self.dataset_path+'/img1/'
+        self.img_List = None
         ####
         self.object_count = 0
         self.total_tracklet_count = 0
@@ -10,20 +30,6 @@ class Config(object):
         ####
         self.imgSeq_length = None
         ###
-        self.draw_while_track = True
-        self.xy_center = True
-        self.use_gt_detections = False
-        ##get detections
-        self.detections = None
-        ## Get image lists
-        #self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-FRCNN'
-        self.dataset_path = '/data/dataset/MOT/ETH'
-        self.img_path = self.dataset_path+'/img1/'
-        self.img_List = None
-        #self.imgsize = [1080,1920,3]
-        self.imgsize = [480,640,3]
-        #self.imgtype = ".jpg"
-        self.imgtype = ".png"
         
 
         ## Common selfeter

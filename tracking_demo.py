@@ -5,6 +5,7 @@ import pickle as pk
 from Obj.Obs_Graph import Obs_Graph
 from tools.prepare_data import prepare_data
 from config import Config
+from image2video import img2mp4
 from mot_func.mot_pre_association import mot_pre_association
 from mot_func.MOT_Initialization_Tracklets import MOT_Initialization_Tracklets
 from mot_func.MOT_Local_Association import MOT_Local_Association
@@ -112,5 +113,9 @@ print("Tracking: Total Time:{}|FPS :{}".format(spend_time,len(param.img_List)/sp
 print("Total Tracklet:{}   |Total Object:{}".format(param.total_tracklet_count,param.object_count))
 print("TT-TO:  {}".format(param.total_tracklet_count-param.object_count))
 print("IDS:{}".format(param.ids))
+
+print("mp4 result is generating.....")
+img2mp4(param)
+print("mp4 result is completed!")
 if param.draw_while_track == False:
     pass

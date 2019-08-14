@@ -45,7 +45,7 @@ def MOT_Type_Update(rgbimg=None,Trk=None,param=None,cfr=None,*args,**kwargs):
     
     del_idx = np.array(del_idx)
     if len(del_idx) != 0:
-        print(del_idx)
+        print("removed tracklets ids of which are {}".format(del_idx))
         for idx in sorted(del_idx,reverse=True):
             mot_count_ids(Trk[idx],param)
             Trk.pop(idx)
