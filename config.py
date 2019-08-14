@@ -4,8 +4,9 @@ class Config(object):
     def __init__(self):
         #parameters need to modify frequently
         #self.dataset = "ETH"
-        self.dataset = "ETH"
+        self.dataset = "MOT"
         self.draw_while_track = True
+        self.detection_confidence_thresh = 0.15
         if self.dataset == "MOT":
             self.imgtype = ".jpg"
             self.imgsize = [1080,1920,3]

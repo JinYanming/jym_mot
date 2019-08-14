@@ -32,7 +32,8 @@ def prepare_data(param):
     for detection in detlines:
         detection = deal(detection)[:-1]
         detection = str2float(detection)
-        detection_list.append(detection)
+        if detection[6] >= param.detection_confidence_thresh:
+            detection_list.append(detection)
     detection_list = sorted(detection_list,key=(lambda x:x[0]))
     for detection in detection_list:
         detection[2] = detection[2]-1

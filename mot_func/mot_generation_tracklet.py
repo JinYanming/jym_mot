@@ -38,7 +38,7 @@ def mot_generation_tracklet(rgbimg=None,Trk=None,Obs_grap=None,detections=None,p
         for j in range(0,non_iso.shape[1]):
             #setr=non_iso[j]
             setr = np.unique(non_iso[:,j])
-            if Obs_grap[fr + j - nT+1].iso_idx[setr] == 0:
+            if np.all(Obs_grap[fr + j - nT+1].iso_idx[setr] == 0):
                 puase
             Obs_grap[fr + j - nT+1].iso_idx[setr] = 0
     
