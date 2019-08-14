@@ -27,10 +27,14 @@ def prepare_data(param):
     object_id_list = []
     deal = lambda x:x.strip("\n").split(",")#seperate the lines with ", " and remove the "\n"
     str2float = lambda x:[float(i) for i in x]
-    ###get detections
+    ###get detections and sorted the detections by frames
+    detection_list = []
     for detection in detlines:
         detection = deal(detection)[:-1]
         detection = str2float(detection)
+        detection_list.append(detection)
+    detection_list = sorted(detection_list,key=(lambda x:x[0]))
+    for detection in detection_list:
         detection[2] = detection[2]-1
         detection[3] = detection[3]-1
         if detection[1] not in object_id_list:
