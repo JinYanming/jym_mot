@@ -11,7 +11,7 @@ def get_sub_files(rootdir,param):
             _, ending = os.path.splitext(name)
             if ending == param.imgtype:
                 sub_files.append(name)   
-    return sub_files
+    return sub_files,len(sub_files)
 def prepare_data(param):
     ##### path config
 
@@ -48,11 +48,16 @@ def prepare_data(param):
     img_dir = param.dataset_path+"/img1"
     #img_list = get_sub_files(img_dir,param)
     img_list = []
-    for i in range(0,param.imgSeq_lenth):
+    _,imgSeq_length = get_sub_files(img_dir,param)
+    param.imgSeq_length = imgSeq_length
+    for i in range(0,param.imgSeq_length):
         imgName = "image_"+"{:08d}".format(i)+"_0"+param.imgtype
         img_list.append(imgName)
     param.img_List = img_list
     param.imgSeq_lenth = len(img_list)
+    if len(param.detections) < param.imgSeq_length:
+        param.imgSeq_length = len(param.detections)
+        param.img_List = param.img_List[:param.imgSeq_length]
     print("frames: {} detections:{} ||||img_list generate over!".format(len(param.img_List),len(detections)))
 if __name__ == '__main__':
     param = Config()

@@ -2,7 +2,6 @@ import time,datetime
 import numpy as np
 import cv2
 import pickle as pk
-
 from Obj.Obs_Graph import Obs_Graph
 from tools.prepare_data import prepare_data
 from config import Config

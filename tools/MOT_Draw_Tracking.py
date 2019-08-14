@@ -44,7 +44,7 @@ def draw_frame_for_state(img_url,save_url,img_name,Trk_set,fr,param):
             1.2,
             (0, 255, 0),
             thickness=4)
-    cv2.imwrite(save_url+'/'+"tracked"+img_name, img)
+    cv2.imwrite(save_url+'/'+img_name, img)
 
 
 def draw_frame(img_url,save_url,img_name,fr_detections,xy_center = False):
