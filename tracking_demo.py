@@ -15,7 +15,7 @@ from mot_func.MOT_Type_Update import MOT_Type_Update
 from mot_func.MOT_State_Update import MOT_State_Update
 from mot_func.MOT_Generation_Tracklets import MOT_Generation_Tracklets
 from mot_func.MOT_Tracking_Results import MOT_Tracking_Results
-
+from mot_func.mot_count_ids import mot_count_ids
 from tools.MOT_Draw_Tracking import MOT_Tracking_Reauslt_Realtime
 from tools.fileGiant import clear_subfile
 print("config param generated...")
@@ -103,12 +103,15 @@ for fr in range(init_frame,frame_end):
     if param.draw_while_track:
         MOT_Tracking_Reauslt_Realtime(Trk_sets,fr,param)
 
-##
+##count the ids of the rest Tracklet
+for tracklet in Trk:
+    mot_count_ids(tracklet,param)
 print("Tracking Done...")
 end_time = time.time()
 spend_time = end_time-start_time
 print("Tracking: Total Time:{}|FPS :{}".format(spend_time,len(param.img_List)/spend_time))
-print("Total Tracklet:{}Total Object:{},TT-To:{}".format(param.total_tracklet_count,param.object_count,param.total_tracklet_count-param.object_count))
+print("Total Tracklet:{}   |Total Object:{}".format(param.total_tracklet_count,param.object_count))
+print("TT-TO:  {}".format(param.total_tracklet_count-param.object_count))
 print("IDS:{}".format(param.ids))
 if param.draw_while_track == False:
     pass
