@@ -76,7 +76,7 @@ Trk,param,Obs_grap = MOT_Initialization_Tracklets(init_img_set,Trk,detections,pa
 clear_subfile("./result/")
 ## Tracking
 for fr in range(init_frame,frame_end):
-    if fr == 329:
+    if fr == 34:
         print(111111222)
     #for i in range(0,len(Trk)):
     #    print(Trk[i].hyp.ystates_ids)

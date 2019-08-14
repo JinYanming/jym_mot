@@ -32,12 +32,15 @@ def mot_generation_tracklet(rgbimg=None,Trk=None,Obs_grap=None,detections=None,p
                 idx1=np.where(Obs_grap[fr + h - nT + 1].iso_idx == 1)[0]
                 idx2=idx1[ass_idx[-1 + h - nT + 1][0]]
                 idx.append(idx2)
-            non_iso = non_iso + idx
-    for j in range(0,len(non_iso)):
-        setr=non_iso[j]
-        if Obs_grap[fr + j - nT+1].iso_idx[setr] == 0:
-            puase
-        Obs_grap[fr + j - nT+1].iso_idx[setr] = 0
+            non_iso.append(idx)
+    non_iso = np.array(non_iso)
+    if non_iso.size != 0:
+        for j in range(0,non_iso.shape[1]):
+            #setr=non_iso[j]
+            setr = np.unique(non_iso[:,j])
+            if Obs_grap[fr + j - nT+1].iso_idx[setr] == 0:
+                puase
+            Obs_grap[fr + j - nT+1].iso_idx[setr] = 0
     
     
     return Trk,param,Obs_grap

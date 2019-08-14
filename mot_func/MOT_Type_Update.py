@@ -37,8 +37,8 @@ def MOT_Type_Update(rgbimg=None,Trk=None,param=None,cfr=None,*args,**kwargs):
             L_pos=L_pos + margin
             R_pos=R_pos - margin
 
-            print("**"*80)
-            print(C_pos,L_pos,R_pos)
+            #print("**"*80)
+            #print(C_pos,L_pos,R_pos)
             if not mot_is_reg(C_pos,L_pos,R_pos):
                 del_idx.append(i)
     

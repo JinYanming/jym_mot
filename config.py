@@ -21,6 +21,7 @@ class Config(object):
         self.img_List = None
         #self.imgsize = [1080,1920,3]
         self.imgsize = [480,640,3]
+        #self.imgtype = ".jpg"
         self.imgtype = ".png"
         
 

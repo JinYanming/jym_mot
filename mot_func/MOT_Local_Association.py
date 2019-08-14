@@ -69,10 +69,10 @@ def MOT_Local_Association(Trk = None,detections = None,Obs_grap = None,param = N
             confidence = []
             for i in Trk:
                 confidence.append(i.Conf_prob)
-            print(score_mat)
+            #print(score_mat)
             #matching by hungarian Algorithm the the socre matrix shape should be[len(high_trk),len(high_trk]
             matching,__ = mot_association_hungarian(score_mat,thr,nargout = 2)
-            print(matching)
+            #print(matching)
             if matching.size != 0:
                 for i in range(0,matching.shape[1]):
                     ass_idx_row = matching[0,i]

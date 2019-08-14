@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from mot_func.mot_search_association import mot_search_association
 from mot_func.mot_return_ass_idx import mot_return_ass_idx
 from mot_func.mot_tracklets_components_setup import mot_tracklets_components_setup
@@ -22,7 +23,10 @@ def MOT_Initialization_Tracklets(rgbimg=None,Trk=None,detections=None,param=None
             __,pid=max(ass_ln)
             ass_idx=tmp_ass_idx[pid]
         if len(np.where(np.array(ass_idx) != -1)[0]) >= new_thr:#if the length of init tracketlet >4 then generate the tracklet
+            time1 = time.time()
             Trk,param=mot_tracklets_components_setup(rgbimg,Trk,detections,fr,ass_idx,param,None,True)
+            time2 = time.time()
+            print("after tracklets generate",time2-time1)
             for h in range(0,len(np.where(ass_idx != 0))):
                 Y_set[fr-1 - h].child[ass_idx[-1 - h][0]]=0
     
