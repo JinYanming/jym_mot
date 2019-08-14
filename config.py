@@ -2,6 +2,7 @@ import numpy as np
 import os
 class Config(object):
     def __init__(self):
+        self.dataset = "ETH"
         ####
         self.object_count = 0
         self.total_tracklet_count = 0

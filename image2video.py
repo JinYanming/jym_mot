@@ -7,14 +7,17 @@ from config import Config
 def img2mp4(param):
     path = './result/'
     filelist = os.listdir(path)
-    fps = 12 #视频每秒24帧
+    if param.dataset == "ETH"
+        fps = 12 #视频每秒12帧
+        getId = lambda imgName:int(imgName[-14:-6])
+    elif param.dataset == "MOT"
+        fps = 24 #视频每秒24帧
+        getId = lambda imgName:int(imgName[:-4])
     size = (param.imgsize[1],param.imgsize[0]) #需要转为视频的图片的尺寸
     #可以使用cv2.resize()进行修改
     video = cv2.VideoWriter("TrackResult.mp4", cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), fps, size)
     #视频保存在当前目录下
     imgList  = [img for img in filelist]
-    getId = lambda imgName:int(imgName[-14:-6])
-    #getId = lambda imgName:int(imgName[:-4])
     imgList = sorted(imgList,key=cmp_to_key(lambda x,y:getId(x) - getId(y)))
     for item in imgList:
         if item.endswith(param.imgtype): 
