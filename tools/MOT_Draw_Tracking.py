@@ -11,10 +11,12 @@ def draw_frame_for_state(img_url,save_url,img_name,Trk_set,fr,param):
     xy_center = param.xy_center
     confidence = Trk_set.conf
     label = Trk_set.label
+    idsw = Trk_set.idsw
     raw_color = np.array([255,255,255])
     if xy_center:
         detections = []
         for detection in Trk_set.states:
+            detection = detection.copy()
             detection[0] = detection[0] - detection[2]/2
             detection[1] = detection[1] - detection[3]/2
             detections.append(detection)
@@ -44,10 +46,35 @@ def draw_frame_for_state(img_url,save_url,img_name,Trk_set,fr,param):
             1.2,
             (0, 255, 0),
             thickness=4)
+
+        cv2.putText(
+            img,
+            str(detections[i]),
+            (int(detections[i][0]+detections[i][2]/2-30), int(detections[i][1]+detections[i][3]/2 - 25)),
+            cv2.FONT_HERSHEY_COMPLEX,
+            0.4,
+            (0, 255, 0),
+            thickness=1)
+        cv2.putText(
+            img,
+            "idsw:"+str(idsw[i]),
+            (int(detections[i][0]+detections[i][2]/2-30), int(detections[i][1]+detections[i][3]/2+55)),
+            cv2.FONT_HERSHEY_COMPLEX,
+            0.6,
+            (0, 255, 0),
+            thickness=1)
+    cv2.putText(
+        img,
+        str(fr),
+        (int(40), int(40)),
+        cv2.FONT_HERSHEY_COMPLEX,
+        1.2,
+        (255, 255, 255),
+        thickness=3)
     cv2.imwrite(save_url+'/'+img_name, img)
 
 
-def draw_frame(img_url,save_url,img_name,fr_detections,xy_center = False):
+def draw_frame(img_url,save_url,img_name,fr_detections,xy_center = False,fr = None):
     fr_detections = lists2array(fr_detections,7)
     fr_detections = np.swapaxes(fr_detections,0,1)
     if xy_center:
@@ -75,6 +102,14 @@ def draw_frame(img_url,save_url,img_name,fr_detections,xy_center = False):
             1.2,
             (0, 255, 0),
             thickness=4)
+    cv2.putText(
+        img,
+        str(fr),
+        (int(40), int(40)),
+        cv2.FONT_HERSHEY_COMPLEX,
+        1.2,
+        (255, 255, 255),
+        thickness=3)
     cv2.imwrite(save_url+'/'+"tracked"+img_name, img)
 
 
@@ -98,14 +133,16 @@ def MOT_Tracking_Results(Trk_sets,fr,param):
     Trk_sets = 0
     print("MOT_Tracking_Results over")
     return Trk_sets
+def MOT_Draw_DT(param = None):
+    detections = param.detections
+    img_path = param.img_path
+    save_path = "./dt_result"
+    for i in range(0,len(detections)):
+        print("fr :{} is drawed!".format(i))
+        frame_detections = detections[i]
+        imgName = param.img_List[i]
+        draw_frame(img_path,save_path,imgName,frame_detections,param.xy_center,i)
 if __name__ == "__main__":
-    img_name = "image_00000000_0.png"
     param = Config()
     prepare_data(param)
-    detections = param.detections
-    print(detections[0])
-    imgName_list = param.img_List
-    for item in zip(detections,imgName_list):
-        fr_detections = item[0]
-        imgName = item[1]
-        draw_frame(param.img_path,"./mark",imgName,fr_detections,True)
+    MOT_Draw_DT(param)

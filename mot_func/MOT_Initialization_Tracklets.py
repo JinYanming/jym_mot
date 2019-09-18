@@ -5,7 +5,7 @@ from mot_func.mot_return_ass_idx import mot_return_ass_idx
 from mot_func.mot_tracklets_components_setup import mot_tracklets_components_setup
 def MOT_Initialization_Tracklets(rgbimg=None,Trk=None,detections=None,param=None,Y_set=None,fr=None,*args,**kwargs):
     print("MOT_Initialization_Tracklets.py start")
-    fr = fr 
+    fr = fr
     new_thr=param.new_thr
     for i in range(0,len(Y_set[fr-1].child)):#backup to init the initial tracklet
         prt_idx=Y_set[fr-1].child[i]
@@ -26,7 +26,7 @@ def MOT_Initialization_Tracklets(rgbimg=None,Trk=None,detections=None,param=None
             time1 = time.time()
             Trk,param=mot_tracklets_components_setup(rgbimg,Trk,detections,fr,ass_idx,param,None,True)
             time2 = time.time()
-            print("after tracklets generate",time2-time1)
+            #print("after tracklets generate",time2-time1)
             for h in range(0,len(np.where(ass_idx != 0))):
                 Y_set[fr-1 - h].child[ass_idx[-1 - h][0]]=0
     

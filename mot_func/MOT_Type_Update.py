@@ -19,7 +19,7 @@ def MOT_Type_Update(rgbimg=None,Trk=None,param=None,cfr=None,*args,**kwargs):
             if 'Low' == type_:
                 if Conf_prob > type_thr:
                     Trk[i].type = 'High'
-                efr=Trk[i].efr
+                efr=Trk[i].last_update
                 if np.abs(cfr - efr) >= max_frame:
                     del_idx.append(i)
                     lb_idx.append(Trk[i].label)
@@ -37,15 +37,13 @@ def MOT_Type_Update(rgbimg=None,Trk=None,param=None,cfr=None,*args,**kwargs):
             L_pos=L_pos + margin
             R_pos=R_pos - margin
 
-            #print("**"*80)
-            #print(C_pos,L_pos,R_pos)
             if not mot_is_reg(C_pos,L_pos,R_pos):
                 del_idx.append(i)
     
     
     del_idx = np.array(del_idx)
     if len(del_idx) != 0:
-        print("removed tracklets ids of which are {}".format(del_idx))
+        print("removed tracklets ids of which are {}".format(del_idx),"-"*30,"beacase it break up for too long")
         for idx in sorted(del_idx,reverse=True):
             mot_count_ids(Trk[idx],param)
             Trk.pop(idx)

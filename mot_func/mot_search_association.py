@@ -1,10 +1,10 @@
 import numpy as np
 
-def mot_search_association(Y=None,fr=None,prt_idx=None,*args,**kwargs):
+def mot_search_association(Obs_grap=None,fr=None,prt_idx=None,*args,**kwargs):
     """
     input:
-            Y,fr,prt_idx
-            Y:graph
+            Obs_grap,fr,prt_idx
+            Obs_grap:graph
             fr:the last init frame
             prt_idx:every child dectection list from the privious frame
     output:
@@ -15,21 +15,18 @@ def mot_search_association(Y=None,fr=None,prt_idx=None,*args,**kwargs):
     ct= 0
     ass_idx=[]
     check_none = lambda x: True if len(x) >= 1 and x[0]!=-1 else False
-    if check_none(prt_idx):
-        while flg == 1:
+    if prt_idx != -1:
+        while flg == 1 :
             ct=ct + 1
-            getMapped = lambda c_list,p_list:[j for i in c_list for j in p_list[i]]
-            prt_idx = getMapped(prt_idx,Y[fr-ct].child)
-            if len(prt_idx) == 1:
+            if Obs_grap[fr -ct].iso_idx[prt_idx] != -1:
+                getMapped = lambda c_list,p_list:[j for i in c_list for j in p_list[i]]
+                prt_idx = Obs_grap[fr-ct].child[prt_idx]
                 ass_idx.append(prt_idx)
-                if prt_idx[0] == -1:#when it comes to -1 means the tracklet suspend
-                    flg = 0
             else:
-                ass_idx.append([-1])
-                flg=0
-            #else:
-            #    ass_idx.append(prt_idx)
-            #   flg=0
+                flg = 0
+            #when it comes to -1 means the tracklet suspend
+            if prt_idx == -1:
+                flg = 0
 
     
     ass_idx.reverse()

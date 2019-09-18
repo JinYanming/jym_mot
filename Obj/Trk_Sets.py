@@ -5,4 +5,4 @@ class Trk_Set(object):
         self.conf = []
         self.label = []
         self.states = []
-        self.ystates_ids = []
+        self.idsw = []

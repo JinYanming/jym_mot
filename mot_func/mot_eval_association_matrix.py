@@ -33,8 +33,10 @@ def mot_eval_association_matrix(Refer = None,Test = None,param = None,type_ = No
             test_h = Test[j].h
             test_w = Test[j].w
             shp_sim = mot_shape_similarity(refer_h,refer_w,test_h,test_w)
-            score_mat[i,j] = np.dot(np.dot(mot_sim,app_sim),shp_sim)
-    
+            check_time_order = lambda head,tail:1 if head.last_update <= tail.init_time else 0
+            #print(mot_sim,app_sim,shp_sim)
+            #print(Refer[i].ifr,Refer[i].last_update,Test[j].ifr,Test[j].last_update)
+            score_mat[i,j] = check_time_order(Refer[i],Test[j])*mot_sim*app_sim*shp_sim
     return score_mat
     
 if __name__  ==  '__main__':

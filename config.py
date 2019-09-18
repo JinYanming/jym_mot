@@ -3,22 +3,33 @@ import os
 class Config(object):
     def __init__(self):
         #parameters need to modify frequently
-        #self.dataset = "ETH"
-        self.dataset = "MOT"
+        self.dataset = "ETH"
+        #self.dataset = "MOT"
+        #tracking parameters
+        self.tracking_start_frame = 0
+        self.show_background_track = False
         self.draw_while_track = True
-        self.detection_confidence_thresh = 0.15
+        self.wh_predict = False
         if self.dataset == "MOT":
             self.imgtype = ".jpg"
             self.imgsize = [1080,1920,3]
             self.xy_center = False
             self.use_gt_detections = True
             self.dataset_path = '/data/dataset/MOT/MOT17/train/MOT17-02-FRCNN'
+            self.detection_confidence_thresh = 0.15
         elif self.dataset == "ETH":
             self.xy_center = True
             self.use_gt_detections = False
             self.dataset_path = '/data/dataset/MOT/ETH'
             self.imgsize = [480,640,3]
             self.imgtype = ".png"
+            self.detection_confidence_thresh = 0
+        ##tracklet information
+        self.window_min_length_tracklet_generated = 5
+        ##tempory window
+        self.window_length = 20
+        self.head_tail_A_Model_length = 3
+        self.similar_thresh = 0.6
         ##get detections
         self.detections = None
         ## Get image lists

@@ -57,7 +57,7 @@ def kf_predict(x=None,P=None,A=None,Q=None,B=None,u=None,*args,**kwargs):
     nargin = kf_predict.__code__.co_varnames
     nargin = len(nargin)
     # Check arguments
-    
+    P=P.squeeze() 
     if nargin < 6:
         A=np.array([])
     
@@ -86,7 +86,7 @@ def kf_predict(x=None,P=None,A=None,Q=None,B=None,u=None,*args,**kwargs):
     # Perform prediction
     if u == None:
         x= np.matmul(A,x)
-        temp = np.matmul(A,P)
+        temp = np.matmul(A,P).squeeze()
         temp = np.matmul(temp,A.T)
         temp = temp + Q
         P=np.matmul(np.matmul(A,P),A.T) + Q

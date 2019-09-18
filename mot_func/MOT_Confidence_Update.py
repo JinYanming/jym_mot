@@ -2,7 +2,7 @@ import numpy as np
 from Common.list2array import lists2array
 def MOT_Confidence_Update(Trk=None,param=None,fr=None,lambda_=None,*args,**kwargs):
 
-    
+    lambda_ = param.lambda_
     if lambda_ == None:
         lambda_=1.2
     

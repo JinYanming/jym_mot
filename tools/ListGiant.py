@@ -1,6 +1,8 @@
 import numpy as np
 def ListIndice1d(raw_list,indice_list):
     result_list = []
+    if len(indice_list) == 0:
+        return result_list
     for item in indice_list:
         result_list.append(raw_list[item])
     return result_list

@@ -10,12 +10,12 @@ def km_state_est(X=None,Y=None,param=None,P=None,*args,**kwargs):
 # X: object motion state, (x_pos, x_vel, y_pos, y_vel)
 # Y: measurements, (x_pos, y_pos)
     if P == None:
-        P=param.P
+        P=param.P.copy()
     
-    H=param.H
-    R=param.R
-    A=param.F
-    Q=param.Q
+    H=param.H.copy()
+    R=param.R.copy()
+    A=param.F.copy()
+    Q=param.Q.copy()
     if ~np.all(Y==0):
         MM,PP=kf_loop(X,P,H,R,Y,A,Q,nargout=2)
     else:

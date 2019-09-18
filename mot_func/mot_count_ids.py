@@ -1,5 +1,5 @@
 def mot_count_ids(Tracklet,param):
-    id_list = Tracklet.hyp.ystates_ids
+    id_list = Tracklet.hyp.ystates_id
 
     count = 0
     prev_id = id_list[0]

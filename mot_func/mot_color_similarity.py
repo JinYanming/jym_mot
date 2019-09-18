@@ -20,7 +20,8 @@ def color_similarity_only_bhat(refer_hist=None,target_hist=None,*args,**kwargs):
     bhattcoeff=np.sum(np.sqrt(refer_hist*target_hist))
     if bhattcoeff > 1:
         #r,p=corrcoef(refer_hist,target_hist,nargout=2)
-        likelihood = None
+        #print(bhattcoeff,"bhattcoeff")
+        likelihood = 1
         print("color error")
         #likelihood=p(1,2)
     else:

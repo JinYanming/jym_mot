@@ -4,7 +4,9 @@ class HYP(object):
         self.score = None
         self.ystate = None
         self.new_tmpl = None
-        self.ystates_ids = None
+        self.ystates_id = None
+        self.idsw = None
+        self.idsw_count = None
 class F_Motion(object):
     def __init__(self):
         self.X = None
@@ -24,9 +26,14 @@ class Tracklet(object):
         self.label = "-1"
         self.ifr = 0
         self.efr = 0
+        self.window_end = 0
         self.last_update = 0
         self.state = []
         self.A_model = np.zeros(144)
+        self.A_model_head = np.zeros(144)
+        self.A_model_tail = np.zeros(144)
+        self.A_model_list = []
         self.FMotion = F_Motion()
         self.BMotion = B_Motion()
         self.hyp = HYP()
+        self.detections_id_list = []
